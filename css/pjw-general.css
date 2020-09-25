@@ -1,0 +1,69 @@
+/* PJW Mini Button */
+.pjw-mini-button {
+  font-size: 14px; font-weight: bold;
+  border: 0; border-radius: 7px;
+  background-color: white; color: #63065f;
+  user-select: none; cursor: pointer;
+  padding: 1px 7px;
+  margin: 2px 5px;
+  transition: all .1s ease-in;
+}
+
+.pjw-mini-button:hover {
+  color: #f37232;
+  border-radius: 10px;
+  padding: 1px 10px;
+  margin: 2px;
+}
+
+.pjw-mini-button:active {
+  color: #c1c1c1;
+  background-color: rgba(255, 255, 255, .8);
+}
+
+body {
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
+}
+
+body * {
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+@font-face {
+  font-family: 'Material Icons Round';
+  font-style: normal;
+  font-weight: 400;
+  src: 
+    url("chrome-extension://__MSG_@@extension_id__/fonts/Material Icons Round.woff2") format('woff2'),
+    url("https://fonts.gstatic.com/s/materialiconsround/v26/LDItaoyNOAY6Uewc665JcIzCKsKc_M9flwmPq_HTTw.woff2") format('woff2'),
+    url("https://cubiccm.github.io/Material%20Icons%20Round.woff2") format('woff2');
+}
+
+.material-icons-round {
+  font-family: 'Material Icons Round' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+}
+
+:root {
+  --white: rgba(255, 255, 255, .9);
+  --black: rgba(0, 0, 0, .9);
+  --gray: rgba(255, 255, 255, .5);
+}
+
+.cv-page-header {
+  background-color: #63065f !important;
+}

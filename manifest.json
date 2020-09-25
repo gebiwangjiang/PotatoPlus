@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "PotatoPlus",
-  "version": "0.2.3",
+  "version": "0.3",
   "description": "Potato Overflow! NJU土豆改善工程",
   "icons": {
     "16": "img/logo.png",
@@ -14,6 +14,12 @@
       "matches": ["*://*.nju.edu.cn/jiaowu*"],
       "css": ["css/material-components-web.min.css", "css/pjw.css", "css/pjw-classlist.css", "css/pjw-filter.css"],
       "js": ["js/inject.js"],
+      "run_at": "document_start"
+    }, 
+    {
+      "matches": ["*://xk.nju.edu.cn/*"],
+      "css": ["css/material-components-web.min.css", "css/pjw-general.css", "css/pjw-classlist.css", "css/pjw-filter.css"],
+      "js": ["js/inject-modern.js"],
       "run_at": "document_start"
     }
   ],

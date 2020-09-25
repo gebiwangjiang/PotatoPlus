@@ -106,13 +106,13 @@ window.PJWConsole = class {
       </div>
     </div>`;
 
-    this.dom = $$(html).appendTo("body");
+    this.dom = jQuery(html).appendTo("body");
     this.history = this.dom.children("#pjw-console-history");
 
-    $$(document).on("mousemove", null, {
+    jQuery(document).on("mousemove", null, {
       target: this
     }, function(e) {
-      if (e.clientY >= $$(window).height() - 60)
+      if (e.clientY >= jQuery(window).height() - 60)
         e.data.target.show();
     });
 
