@@ -498,6 +498,7 @@ function ClassListPlugin() {
     // Checks match of the search string ($pattern) in target string ($str)
     matchDegree(pattern, str) {
       function testString(keyword, str) {
+        if (!str) return 0;
         if (keyword.length != 1 && keyword[0] == "-") {
           if (testString(keyword.slice(1), str) !== 0)
             return false;
@@ -535,6 +536,7 @@ function ClassListPlugin() {
         return 0;
       }
 
+      if (!str) return 0;
       pattern = pattern.trim().split(" ");
       if (pattern[0] == "") return 0;
       var pattern_num = pattern.length;
@@ -653,8 +655,6 @@ function ClassListPlugin() {
         this.class_data[i].obj.setPriority(this.class_data.length - i);
       }
       this.handleResize();
-      if (total_count === false || total_count <= this.class_data.length)
-        this.prepared_to_add = false;
       window.mdc.autoInit();
     }
 
@@ -670,6 +670,7 @@ function ClassListPlugin() {
     }
 
     parseWeekNum(weeks_list) {
+      if (!weeks_list) return [];
       var weeks = "000000000000000000".split("");
       for (var item of weeks_list) {
         for (var index in item.week) {
@@ -694,6 +695,7 @@ function ClassListPlugin() {
 
     // "normal", "odd", "even"
     parseWeekType(weeks) {
+      if (!weeks) return "normal";
       var odd_flag = false, even_flag = false;
       for (var i = 0; i < total_weeks; i++) {
         if (weeks[i] == "1" && i % 2 == 0) odd_flag = true;
@@ -708,6 +710,7 @@ function ClassListPlugin() {
 
     parseLessonTime(data) {
       var lesson_time = [];
+      if (!data) return [];
       for (var item of data) {
         lesson_time.push({
           start: parseInt(item.beginSection),
@@ -722,7 +725,7 @@ function ClassListPlugin() {
     checkScroll() {
       if ("scroll_lock" in this && this.scroll_lock == true) return;
       this.scroll_lock = true;
-      if (this.class_data.length > this.max_classes_loaded && $(window).scrollTop() + $(window).height() + 1600 >= $(document).height()) {
+      if (this.class_data.length > this.max_classes_loaded && $('#course-main .content-container').scrollTop() + $('#course-main .content-container').height() + 1600 >= $(".pjw-classlist").height()) {
         for (var i = this.max_classes_loaded; i < this.max_classes_loaded + this.class_load_size && i < this.class_data.length && this.class_data[i].data.priority >= 0; i++)
           this.class_data[i].obj.show();
         this.max_classes_loaded += this.class_load_size;
@@ -736,7 +739,10 @@ function ClassListPlugin() {
     loadAll() {
       return this.load().then(() => {
         CVParams.pageNumber++;
-        if (this.prepared_to_add == false) {
+        if (CVParams.pageNumber >= 100) return;
+        if (this.is_fully_loaded || sessionStorage["teachingClassType"] == "SC") {
+          this.is_fully_loaded = false;
+          this.prepared_to_add = false;
           this.addFilterHook("handleRefreshComplete");
           if (this.class_data.length == 0)
             $("#pjw-classlist-count").html(`No class found : (`);
@@ -1115,7 +1121,7 @@ function ClassListPlugin() {
         e.data.target.triggerSwitch(t.attr("id"));
       });
 
-      $(window).on("scroll", null, {
+      $('#course-main .content-container').off('scroll').on("scroll", null, {
         target: this
       }, (e) => {
         e.data.target.checkScroll();

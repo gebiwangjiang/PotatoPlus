@@ -232,16 +232,10 @@ window.potatojw_intl = function() {
       return queryParam;
     }
 
-    window.queryPublicCourse = function(queryParam) {
-      list.refresh();
-      return BH_UTILS.doAjax(
-          BaseUrl + "/sys/xsxkapp/elective/publicCourse.do",
-          queryParam == null ? {} : queryParam,
-          "post", {}, {
-              "token": sessionStorage.token,
-              language: sessionStorage.getItem('language')
-          }
-      );
+    window.queryPublicCourse = window.queryCourseData = window.queryfavoriteResults = function(queryParam) {
+      list.refresh(true);
+      CVParams.canTurnPage = true;
+      CVParams.stopChangeMenu = false;
     }
 
     ClassListPlugin();
@@ -250,11 +244,13 @@ window.potatojw_intl = function() {
     $(".result-container").css("display", "none");
 
     list.parse = function(data) {
-
       return new Promise((resolve, reject) => {
+        console.log(data.dataList.length);
+        if (!data["dataList"] || data.dataList.length == 0)
+          this.is_fully_loaded = true;
         try {
           for (var item of data.dataList) {
-            var select_status = item.isChoose == "1" ? "Selected" : (item.isFull == "1" ? "Full" : "Select");
+            var select_status = sessionStorage["teachingClassType"] == "QB" ? false : (item.isChoose == "1" ? "Selected" : (item.isFull == "1" ? "Full" : "Select"));
             var class_data = {
               classID: item.teachingClassID,
               title: item.courseName,
@@ -287,7 +283,7 @@ window.potatojw_intl = function() {
               class_weeknum: this.parseWeekNum(item.teachingTimeList),
               select_button: {
                 status: select_status,
-                text: `${item.numberOfSelected}/${item.classCapacity}`,
+                text: `${item.numberOfSelected || item.numberOfFirstVolunteer}/${item.classCapacity}`,
                 action: (e) => {
                   return new Promise((resolve, reject) => {
                     resolve();
@@ -309,10 +305,24 @@ window.potatojw_intl = function() {
     }
 
     list.load = function() {
+      var target_page = "";
+      switch(sessionStorage["teachingClassType"]) {
+        case "QB":
+          target_page = "queryCourse.do";
+          break;
+        case "SC":
+          target_page = "queryfavorite.do";
+          break;
+        case "ZY":
+          target_page = "programCourse.do";
+          break;
+        default:
+          target_page = "publicCourse.do";
+      }
       return new Promise((resolve, reject) => {
         $.ajax({
           type: "POST",
-          url: BaseUrl + "/sys/xsxkapp/elective/publicCourse.do",
+          url: BaseUrl + "/sys/xsxkapp/elective/" + target_page,
           data: getListParam(),
           headers: {
             "token": sessionStorage.token
