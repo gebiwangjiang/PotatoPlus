@@ -780,7 +780,7 @@ function ClassListPlugin() {
 
     // Loads a filter module by name
     loadModule(name) {
-      if (this.filter_modules.include(name)) return false;
+      if (this.filter_modules.includes(name)) return false;
       this.filter_modules.push(name);
       this.filter_panel.find(".pjw-classlist-bottom").before(pjw_filter[name].html);
       this.filters[name] = pjw_filter[name];
