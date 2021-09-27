@@ -5,7 +5,7 @@ function injectScript(path, module = false, defer = false) {
   if (defer) script.setAttribute('defer', '');
   if (module) script.setAttribute('type', 'module');
   else script.setAttribute('type', 'text/javascript');
-  script.src = browser.extension.getURL(path);
+  script.src = browser.runtime.getURL(path);
   document.documentElement.appendChild(script);
 }
 
@@ -13,13 +13,16 @@ function injectStyle(path) {
   var stylesheet = document.createElement('link');
   stylesheet.setAttribute('type', 'text/css');
   stylesheet.setAttribute('rel', 'stylesheet');
-  stylesheet.setAttribute('href', browser.extension.getURL(path));
+  stylesheet.setAttribute('href', browser.runtime.getURL(path));
   document.documentElement.appendChild(stylesheet);
 }
 
 function injectScriptFromString(str) {
   var script = document.createElement('script');
   script.text = str;
+  document.documentElement.appendChild(script);
+  var script = document.createElement('pjw_ldscript');
+  script.setAttribute("r", str);
   document.documentElement.appendChild(script);
 }
 
@@ -76,25 +79,22 @@ function injectStyleFromString(str) {
   // injectStyle("css/pjw-console.css");
   /* DO NOT REMOVE */
 
-  /* Let's backup the builtin JS prototype so that the FAAAAACING prototype.js won't FAACING RUIN MY CODE AND MY LIFE IN THIS PROJECT */
-  injectScriptFromString(`window.proto_backup = {
-    reduce: Array.prototype.reduce
-  };`);
-
   if (window.pjw_mode != "course" && window.pjw_mode != "xk_system") {
     injectScript("js/jquery.min.js");
   }
   injectScript("js/store.min.js");
   injectScript("js/material-components-web.min.js");
 
-  injectScriptFromString(`
-    var pjw_mode = "${pjw_mode}";
-  `);
+  // injectScriptFromString(`var pjw_mode = "${pjw_mode}";`);
   if (pjw_mode == "grade_info") {
     injectStyleFromString(`table.TABLE_BODY{ display: none; }`);
   } else if (pjw_mode == "main_page") {
     injectScriptFromString(`alert = function(x) {window.alert_data = x;};`);
+    // SHA256: SKUwLExrGl1JqdHjSANOOCr/SXWXVqfllcWVOQKopwo=
   }
+  /* Let's backup the builtin JS prototype so that the FAAAAACING prototype.js won't FAACING RUIN MY CODE AND MY LIFE IN THIS PROJECT */
+  injectScriptFromString(`window.proto_backup = { reduce: Array.prototype.reduce };`);
+  // SHA256: xfghm0hwtYw/jMM4ZdFI201Z9v7DmGufKLEyVIaIung=
 
   if (pjw_mode != "") {
     injectScript("js/tinypinyin.js");

@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "PotatoPlus",
   "version": "0.3.2",
   "description": "Potato Overflow! NJU土豆改善工程",
@@ -19,11 +19,10 @@
       "all_frames": true
     }
   ],
-  "web_accessible_resources": [
-    "js/*",
-    "css/*",
-    "fonts/*"
-  ],
+  "web_accessible_resources": [{
+    "resources": ["js/*","css/*","fonts/*"],
+    "matches": ["*://*.nju.edu.cn/*"]
+  }],
   "browser_specific_settings": {
     "gecko": {
       "update_url": "https://github.com/cubiccm/potatoplus/releases/latest/download/updates.json"
